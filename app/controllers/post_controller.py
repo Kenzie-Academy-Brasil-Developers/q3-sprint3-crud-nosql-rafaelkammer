@@ -13,10 +13,10 @@ def retrieve_all():
 
     return jsonify(posts_list), HTTPStatus.OK
 
-def retrieve_one(post_id):
+def retrieve_one(id):
 
     try:
-        post = Post.get_one(post_id)
+        post = Post.get_one(id)
 
         Post.serialize_post(post)
 
@@ -38,10 +38,10 @@ def create_post():
     except KeyError:
         return {"msg": "Incorrect data key entry"}, HTTPStatus.BAD_REQUEST
 
-def delete_post(post_id):
+def delete_post(id):
 
     try:
-        excluded_post = Post.exclude_post(post_id)
+        excluded_post = Post.exclude_post(id)
         Post.serialize_post(excluded_post)
 
         return jsonify(excluded_post), HTTPStatus.OK
@@ -49,13 +49,13 @@ def delete_post(post_id):
     except NotFoundErr:
         return {"msg": "Post not found."}, HTTPStatus.NOT_FOUND
 
-def update_post(post_id):
+def update_post(id):
 
     try:
         data = request.get_json()
         data["updated_at"] = dt.now().strftime("%d/%m/%Y %H:%M:%S")
 
-        update_target = Post.update_post(post_id, data)
+        update_target = Post.update_post(id, data)
         
         Post.serialize_post(update_target)
 
